@@ -1,13 +1,12 @@
 package com.example.bootcampproject.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -32,7 +31,7 @@ public class Stock {
     private int lastPrice;
 
 
-
-    @OneToMany(mappedBy = "stock")
-    private List<Trade> tradeList;
+    @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Trade> tradeList = new ArrayList<>();
 }

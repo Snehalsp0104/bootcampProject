@@ -26,7 +26,6 @@ public class Trade {
 
     @ManyToOne
     @JoinColumn(name = "stockId")
-    @JsonIgnore
     private Stock stock;
 
     private int price;

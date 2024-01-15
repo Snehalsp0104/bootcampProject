@@ -1,13 +1,11 @@
 package com.example.bootcampproject.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,8 +17,8 @@ public class User {
     @GeneratedValue
     int userId;
 
-    int userName;
+    String userName;
 
-    @OneToMany(mappedBy = "user")
-    List<Trade> trades;
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    List<Trade> trades = new ArrayList<>();
 }
