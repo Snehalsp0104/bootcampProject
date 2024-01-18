@@ -3,6 +3,7 @@ package com.example.bootcampproject.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Stock {
     @Id
     @GeneratedValue
@@ -20,15 +22,19 @@ public class Stock {
 
     private String stockName;
 
-    private int openingPrice;
+    private float openingPrice;
 
-    private int closingPrice;
+    private float closingPrice;
 
-    private int highPrice;
+    private float highPrice;
 
-    private int lowPrice;
+    private float lowPrice;
 
-    private int lastPrice;
+    private float lastPrice;
+
+    private float prevClose;
+
+    //private float lastPrice;
 
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)

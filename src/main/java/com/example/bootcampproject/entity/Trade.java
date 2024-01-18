@@ -1,7 +1,9 @@
 package com.example.bootcampproject.entity;
 
+import com.example.bootcampproject.enums.TradeType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,8 +17,8 @@ public class Trade {
     @GeneratedValue
     private int tradeId;
 
-    private String tradeType;
-
+    TradeType tradeType;
+    @Positive(message = "Input valid quantity")
     private int quantity;
 
     @ManyToOne
@@ -28,6 +30,6 @@ public class Trade {
     @JoinColumn(name = "stockId")
     private Stock stock;
 
-    private int price;
+    private float price;
 
 }
