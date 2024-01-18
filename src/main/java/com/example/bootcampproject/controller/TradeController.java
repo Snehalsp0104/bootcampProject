@@ -1,5 +1,6 @@
 package com.example.bootcampproject.controller;
 
+import com.example.bootcampproject.dto.PortfolioDto;
 import com.example.bootcampproject.dto.TradeDto;
 import com.example.bootcampproject.entity.Trade;
 import com.example.bootcampproject.exception.*;
@@ -19,9 +20,9 @@ public class TradeController {
     }
 
     @GetMapping("/portfolio/{userId}")
-    public void portfolioDetails(@PathVariable int userId)
+    public PortfolioDto portfolioDetails(@PathVariable int userId)
     {
-
+      return tradeService.portfolioDetails(userId);
     }
 
 }

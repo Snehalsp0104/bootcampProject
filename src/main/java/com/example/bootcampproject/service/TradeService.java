@@ -1,16 +1,20 @@
 package com.example.bootcampproject.service;
 
+import com.example.bootcampproject.dto.HoldingsDto;
 import com.example.bootcampproject.dto.PortfolioDto;
+import com.example.bootcampproject.enums.OutCome;
 import com.example.bootcampproject.enums.TradeType;
 import com.example.bootcampproject.dto.TradeDto;
 import com.example.bootcampproject.entity.Stock;
 import com.example.bootcampproject.entity.Trade;
 import com.example.bootcampproject.entity.User;
 import com.example.bootcampproject.exception.*;
+import com.example.bootcampproject.mapper.TradeMapper;
 import com.example.bootcampproject.repository.StockRepository;
 import com.example.bootcampproject.repository.TradeRepository;
 import com.example.bootcampproject.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.CustomEditorConfigurer;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -101,15 +105,56 @@ public class TradeService {
 
     }
 
-    public PortfolioDto portfolioDetails(int userId)
-    {
+    public PortfolioDto portfolioDetails(int userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if(optionalUser.isEmpty()) throw new UserNotFoundException("User not found");
+        PortfolioDto portfolioDto = new PortfolioDto();
         List<Trade> trades = tradeRepository.getTradeByUserId(userId);
-        List<Trade> holdings = null;
-        for(Trade trade:trades)
-        {
+        float totalPortFolioHolding = 0;
+        float totalbuyPrice = 0;
+        float totalProfitLoss = 0;
+
+
+        List<HoldingsDto> holdings = new ArrayList<>();
+        for (Trade trade : trades) {
             if (trade.getTradeType() == TradeType.Buy) {
-                holdings.add(trade);
+                //  System.out.println(trade);
+                totalbuyPrice+=trade.getPrice()*trade.getQuantity();
+                totalPortFolioHolding+= trade.getPrice()* trade.getQuantity();
+                HoldingsDto singleHolding = TradeMapper.INSTANCE.tradeToHoldingsDto(trade);
+                // int stockId = trade.getStock().getStockId();
+                float currentPrice = trade.getStock().getLastPrice();
+                singleHolding.setCurrentPrice(currentPrice);
+                //System.out.println(currentPrice);
+                float calculatedEarning = currentPrice - trade.getPrice();
+                totalProfitLoss+=calculatedEarning;
+                if (calculatedEarning > 0) {
+                    singleHolding.setOutCome(OutCome.Profit);
+                } else {
+                    singleHolding.setOutCome(OutCome.Loss);
+                }
+                singleHolding.setEarning(calculatedEarning);
+               // System.out.println(singleHolding);
+                holdings.add(singleHolding);
+
+               // System.out.println(holdings);
+
+
             }
+            else {
+                totalPortFolioHolding-= trade.getPrice()* trade.getQuantity();
+            }
+
+
+            portfolioDto.setHoldings(holdings);
+
         }
+        portfolioDto.setTotalPortfolioHolding(totalPortFolioHolding);
+        portfolioDto.setTotalBuyPrice(totalbuyPrice);
+        portfolioDto.setTotalProfitLoss(totalProfitLoss);
+        portfolioDto.setTotalProfitLossPercentage(totalProfitLoss/100);
+        return portfolioDto;
     }
+
+
 }

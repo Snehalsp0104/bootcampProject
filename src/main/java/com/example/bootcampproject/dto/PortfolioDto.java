@@ -12,8 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 public class PortfolioDto {
 List<HoldingsDto> holdings = new ArrayList<>();
-int totalPortfolioHolding;
-int totalBuyPrice;
-int totalProfitLoss;
-int totalProfitLossPercentage;
+float totalPortfolioHolding;
+float totalBuyPrice;
+float totalProfitLoss;
+float totalProfitLossPercentage;
 }

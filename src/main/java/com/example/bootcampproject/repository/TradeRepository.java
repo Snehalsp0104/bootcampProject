@@ -16,5 +16,6 @@ public interface TradeRepository extends JpaRepository<Trade, Integer> {
     @Query("SELECT t FROM Trade t WHERE t.user.userId = :userId and t.stock.stockId = :stockId and t.tradeType=com.example.bootcampproject.enums.TradeType.Sell")
     public Trade getSellTrade(@Param("userId") int userId, @Param("stockId") int stockId);
 
+    @Query("SELECT  t FROM Trade t WHERE t.user.userId= :userId")
     public List<Trade> getTradeByUserId(int userId);
 }
