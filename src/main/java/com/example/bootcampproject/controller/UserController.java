@@ -22,5 +22,10 @@ public class UserController {
         return userService.getUser(id);
     }
 
+    @GetMapping("/{id}/name")
+    public String getUserName(@PathVariable int id){
+        return userService.getUserName(id);
+    }
+
 
 }
